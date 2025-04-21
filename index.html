@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dowry Estimator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-yellow-100 to-pink-200 min-h-screen flex items-center justify-center font-[Inter]">
+  <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md overflow-y-auto max-h-screen">
+    <h1 class="text-3xl font-bold text-center text-pink-700 mb-6">💍 Dowry Estimator</h1>
+
+    <!-- Monthly Income -->
+    <div class="mb-4">
+      <label for="incomeRange" class="block text-sm font-semibold text-gray-600">Monthly Income (BDT)</label>
+      <input type="range" id="incomeRange" min="10000" max="100000" step="1000" 
+             class="w-full accent-pink-600 mt-2" oninput="updateIncomeLabel(this.value)">
+      <div class="flex justify-between text-sm text-gray-500 mt-1">
+        <span>10,000</span>
+        <span>100,000</span>
+      </div>
+      <div class="mt-2 text-center">
+        <span id="incomeLabel" class="text-lg font-semibold text-pink-700">50,000</span> BDT
+      </div>
+      <input type="number" id="incomeInput" value="50000"
+             class="w-full mt-2 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"
+             onchange="syncRange(this.value)">
+    </div>
+
+    <!-- Additional Factors -->
+    <div class="space-y-4">
+      <div>
+        <label class="block text-sm font-semibold text-gray-600">Land/State Owned</label>
+        <select id="landType" class="w-full mt-1 px-3 py-2 border rounded-lg">
+          <option value="none">None</option>
+          <option value="agricultural">Agricultural Land</option>
+          <option value="residential">Residential Land</option>
+          <option value="commercial">Commercial Property</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-600">Job Type</label>
+        <select id="jobType" class="w-full mt-1 px-3 py-2 border rounded-lg">
+          <option value="none">Unemployed</option>
+          <option value="govt">Government Job</option>
+          <option value="private">Private Job</option>
+          <option value="freelancer">Freelancer</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-600">Physical Assets</label>
+        <select id="physicalAssets" class="w-full mt-1 px-3 py-2 border rounded-lg">
+          <option value="none">None</option>
+          <option value="bike">Bike</option>
+          <option value="jewelry">Jewelry</option>
+          <option value="both">Bike & Jewelry</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-600">House Ownership</label>
+        <select id="houseOwnership" class="w-full mt-1 px-3 py-2 border rounded-lg">
+          <option value="renting">Renting</option>
+          <option value="own">Own House</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-600">Number of Rooms</label>
+        <input type="number" id="rooms" min="1" max="10" value="2" class="w-full mt-1 px-3 py-2 border rounded-lg">
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-600">Number of Siblings</label>
+        <input type="number" id="siblings" min="0" max="10" value="1" class="w-full mt-1 px-3 py-2 border rounded-lg">
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-600">Education</label>
+        <select id="education" class="w-full mt-1 px-3 py-2 border rounded-lg">
+          <option value="none">None</option>
+          <option value="school">School</option>
+          <option value="college">College</option>
+          <option value="graduate">Graduate</option>
+          <option value="postgraduate">Postgraduate</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Estimate Button -->
+    <button onclick="calculateLoan()"
+            class="w-full mt-6 bg-pink-600 hover:bg-pink-700 text-white font-semibold py-2 rounded-xl transition duration-200">
+      Estimate Dowry
+    </button>
+
+    <!-- Result -->
+    <div id="result" class="mt-6 text-xl font-semibold text-center text-yellow-700"></div>
+  </div>
+
+  <script>
+    function updateIncomeLabel(value) {
+      document.getElementById("incomeLabel").innerText = parseInt(value).toLocaleString();
+      document.getElementById("incomeInput").value = value;
+    }
+
+    function syncRange(value) {
+      document.getElementById("incomeRange").value = value;
+      document.getElementById("incomeLabel").innerText = parseInt(value).toLocaleString();
+    }
+
+    function calculateLoan() {
+      const income = parseFloat(document.getElementById("incomeInput").value);
+      const landType = document.getElementById("landType").value;
+      const jobType = document.getElementById("jobType").value;
+      const physicalAssets = document.getElementById("physicalAssets").value;
+      const houseOwnership = document.getElementById("houseOwnership").value;
+      const rooms = parseInt(document.getElementById("rooms").value);
+      const siblings = parseInt(document.getElementById("siblings").value);
+      const education = document.getElementById("education").value;
+
+      let score = income / 2;
+
+      if (landType === 'commercial') score += 50000;
+      else if (landType === 'residential') score += 30000;
+      else if (landType === 'agricultural') score += 20000;
+
+      if (jobType === 'govt') score += 60000;
+      else if (jobType === 'private') score += 40000;
+      else if (jobType === 'freelancer') score += 20000;
+
+      if (physicalAssets === 'bike') score += 5000;
+      else if (physicalAssets === 'jewelry') score += 10000;
+      else if (physicalAssets === 'both') score += 15000;
+
+      if (houseOwnership === 'own') score += 25000;
+
+      score += rooms * 5000;
+      score -= siblings * 3000;
+
+      if (education === 'graduate') score += 15000;
+      else if (education === 'postgraduate') score += 25000;
+
+      const dowry = score * 2.5;
+      document.getElementById("result").innerText = `🎁 Estimated Dowry Value: BDT ${dowry.toLocaleString()}`;
+    }
+  </script>
+</body>
+</html>
