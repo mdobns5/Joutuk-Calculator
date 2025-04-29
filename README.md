@@ -24,15 +24,15 @@ A fun project mocking the outdated dowry system — just enter your income, job,
 ---
 
 ## 🚀 Demo
+ 
+🔗 [Live now on GitHub Pages](https://mdobns5.github.io/Joutuk-Calculator/)
 
-🔗 Live now on GitHub Pages:  
-`https://mdobns5.github.io/joutuk-calculator/`
 
 ---
 
 ## 📦 How to Run Locally
 
 ```bash
-git clone https://github.com/mdobns5/joutuk-calculator.git
-cd joutuk-calculator
+git clone https://github.com/mdobns5/Joutuk-Calculator.git
+cd Joutuk-Calculator
 open index.html
